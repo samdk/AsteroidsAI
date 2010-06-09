@@ -1,0 +1,43 @@
+<project name="AsteroidsGP" default="compileboth" basedir=".">
+    <property name="src" location="src" />
+    <property name="build" location="build" />
+
+    <target name="init">
+        <property name="scala-home" location="usr/share/scala" />
+        <property name="scala-library.jar"
+                  value="${scala-home}/lib/scala-library.jar" />
+        <taskdef resource="scala/tools/ant/antlib.xml">
+            <classpath>
+                <pathelement location="${scala.home}/lib/scala-compiler.jar"   />
+                <pathelement location="${scala-library.jar}"   />
+            </classpath>
+        </taskdef>
+    </target>
+
+    <target name="compile">
+        <mkdir dir="${build}" />
+        <javac srcdir="${src}" debug="on" debuglevel="lines,vars,source" destdir="${build}" />
+    </target>
+
+    <target name="compileboth" depends="init">
+        <mkdir dir="${build}" />
+        <scalac srcdir="${src}" destdir="${build}" deprecation="on">
+            <include name="**/*.scala" />
+            <include name="**/*.java" />
+        </scalac>
+        <javac srcdir="${src}" debug="on" debuglevel="lines,vars,source" destdir="${build}" classpath="${build}" />
+    </target>
+
+    <target name="buildremote" depends="init">
+        <mkdir dir="data/build" />
+        <scalac srcdir="${src}" destdir="data/build" deprecation="on">
+            <include name="**/*.scala" />
+            <include name="**/*.java" />
+        </scalac>
+        <javac srcdir="${src}" debug="on" debuglevel="lines,vars,source" destdir="data/build" classpath="data/build" />
+    </target>
+
+    <target name="clean">
+        <delete dir="${build}" />
+    </target>
+</project>
